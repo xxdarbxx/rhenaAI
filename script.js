@@ -86,6 +86,10 @@
       const result = event.results[i];
       const text = result[0].transcript;
 
+      // TEMP DEBUG: log every raw result so we can see exactly what the
+      // Web Speech API is returning (remove once the transcription issue is fixed).
+      console.log("Rhena AI debug: result", i, "isFinal:", result.isFinal, "text:", JSON.stringify(text), "confidence:", result[0].confidence);
+
       if (result.isFinal) {
         finalizedTranscript += text + " ";
       } else {
