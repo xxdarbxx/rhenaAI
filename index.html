@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rhena AI — Speech to Text</title>
+  <meta name="description" content="Rhena AI turns your speech into text in real time, right in your browser." />
+
+  <!-- Google Fonts: Inter for clean, modern SaaS typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Ambient background glow (purely decorative) -->
+  <div class="bg-glow bg-glow--one" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow--two" aria-hidden="true"></div>
+
+  <div class="app">
+
+    <!-- ===== Header ===== -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 0 0-7 0v5A3.5 3.5 0 0 0 12 15Z" stroke="url(#logoGrad)" stroke-width="1.6"/>
+            <path d="M6 11.5a6 6 0 0 0 12 0M12 19.5v2.5" stroke="url(#logoGrad)" stroke-width="1.6" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="logoGrad" x1="0" y1="0" x2="24" y2="24">
+                <stop offset="0" stop-color="#7c9bff"/>
+                <stop offset="1" stop-color="#b083ff"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="brand-name">Rhena <span class="brand-accent">AI</span></span>
+      </div>
+      <a class="brand-badge" href="https://github.com/xxdarbxx/rhenaAI" target="_blank" rel="noopener noreferrer">
+        View on GitHub
+      </a>
+    </header>
+
+    <!-- ===== Main ===== -->
+    <main class="app-main">
+
+      <section class="hero">
+        <h1 class="hero-title">Speak. Watch it write itself.</h1>
+        <p class="hero-subtitle">
+          Rhena AI transcribes your voice into text in real time, directly in your browser — no uploads, no accounts, no waiting.
+        </p>
+      </section>
+
+      <!-- ===== Microphone Control ===== -->
+      <section class="mic-section">
+
+        <div class="mic-wrapper">
+          <!-- Animated sound wave rings, shown only while listening -->
+          <div class="mic-rings" aria-hidden="true">
+            <span class="ring ring-1"></span>
+            <span class="ring ring-2"></span>
+            <span class="ring ring-3"></span>
+          </div>
+
+          <button id="micButton" class="mic-button" type="button" aria-label="Start listening" aria-pressed="false">
+            <svg class="mic-icon" viewBox="0 0 24 24" width="34" height="34" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 0 0-7 0v5A3.5 3.5 0 0 0 12 15Z" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M6 11.5a6 6 0 0 0 12 0M12 19.5v2.5M9 22h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Live sound wave bars, animated only while listening -->
+        <div class="soundwave" id="soundwave" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+
+        <p class="mic-status" id="micStatus">🎤 Ready</p>
+      </section>
+
+      <!-- ===== Transcript ===== -->
+      <section class="transcript-card">
+        <div class="transcript-card-header">
+          <h2>Live Transcript</h2>
+          <div class="stats">
+            <span class="stat"><strong id="wordCount">0</strong> words</span>
+            <span class="stat-divider">·</span>
+            <span class="stat"><strong id="charCount">0</strong> characters</span>
+          </div>
+        </div>
+
+        <textarea
+          id="transcript"
+          class="transcript-textarea"
+          placeholder="Your words will appear here as you speak... you can also type or edit directly."
+          spellcheck="true"
+        ></textarea>
+
+        <div class="transcript-actions">
+          <button id="copyBtn" class="action-btn action-btn--ghost" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="8" y="8" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.7"/>
+            </svg>
+            <span>Copy Transcript</span>
+          </button>
+
+          <button id="clearBtn" class="action-btn action-btn--ghost" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7h14M10 11v6M14 11v6M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            <span>Clear Transcript</span>
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===== Toast (for copy confirmation etc.) ===== -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <!-- ===== Footer ===== -->
+    <footer class="app-footer">
+      <p>Built with the Web Speech API · Runs entirely in your browser · <span class="brand-accent">Rhena AI</span></p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
