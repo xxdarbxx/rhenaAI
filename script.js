@@ -59,7 +59,12 @@
       try {
         recognition.start();
       } catch (err) {
-        // start() throws if called while already active; safe to ignore.
+        // start() throws InvalidStateError if called while already active;
+        // anything else is a real failure and should be surfaced.
+        if (err.name !== "InvalidStateError") {
+          console.error("Rhena AI: recognition.start() failed", err);
+          showToast("Couldn't start listening: " + err.message);
+        }
       }
     }
   });
@@ -95,10 +100,16 @@
   }
 
   function handleRecognitionError(event) {
-    if (event.error === "no-speech" || event.error === "aborted") return;
+    console.error("Rhena AI: recognition error", event.error);
 
-    if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+    if (event.error === "aborted") return;
+
+    if (event.error === "no-speech") {
+      showToast("No speech detected — check your microphone input");
+    } else if (event.error === "not-allowed" || event.error === "service-not-allowed") {
       showToast("Microphone access was denied");
+    } else if (event.error === "audio-capture") {
+      showToast("No microphone was found");
     } else {
       showToast("Something went wrong: " + event.error);
     }
